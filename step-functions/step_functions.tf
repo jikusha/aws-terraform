@@ -46,6 +46,14 @@
 // "ResultPath": null => it means it will send the origin step function input to its output
 // "ResultPath": "$.error-info" => it means it will add the error-info paramter to the original input and will send as output
 
+// Wait For Task Token
+// It allows to pause the step function task execution untill it receives a Task Token
+// It will allow to pause the task execution for other AWS services, human approval or 3rd party integration
+
+
+// Step Function Workflow types
+// 1.Standard(default)    2. Express
+
 
 
 resource "aws_sfn_state_machine" "first-step-function" {
