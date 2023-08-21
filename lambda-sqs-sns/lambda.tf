@@ -39,6 +39,18 @@
 // We can define a DLQ for failed processing
 
 
+// EventBridge Rule to trigger lambda
+// We can set up CRON or Rate EventBridge Rule to trigger lambda in a particular time or after a given interval
+// Need to create event_rule
+// Need to create evemt_target
+// Need to set up permission so that eventbridge can invoke the target (lambda resource based policy)
+
+
+// S3 Event Notification to trigger Lambda
+// when some object is being uploaded or removed from a S3 Bucket then we can set up S3 bucket to send event to a lambda and trigger it
+// Asynchronous invocation
+
+
 resource "aws_lambda_function" "demo-lambda" {
   function_name = "demo-lambda"
   handler = "demo-lambda.handler"
@@ -52,7 +64,7 @@ resource "aws_lambda_function" "demo-lambda" {
   }
   tags = {
     "Name" = "First Lambda using terraform",
-    "Purpose" ="For Learning"
+    "Purpose" = "For Learning"
   }
   environment {
     variables = {
