@@ -51,6 +51,49 @@
 // Asynchronous invocation
 
 
+// Event Source Mapping
+// In case of SQS trigger of a lambda, lambda need to poll message from the SQS
+// If lambda doesn't poll, it will not be triggered
+// For this purpose, an event source mapping will be created internally which will poll message from SQS and will trigger the lambda
+// This is a synchronous invocation
+// So basically:
+// Event source mapper will poll SQS 
+// We need to specify the batch size(1-10)
+// We can't set up a DLQ for the lambda for error (as this is not a aysnchronous invocation)
+// We need to set up DLQ for the SQS itself
+// Lambda automatically scales up to process all the messages in the queue as quickly as possible
+// Lambda deletes items from the queue after successful processing
+
+
+// Lambda Destinations
+// Lambda Destinations can be set up to send successful and failed events for asynchronous invocation
+// Also can be set for discarded events for event source mapper
+
+
+// Lambda IAM Role
+// Lambda role gives the permission to lambda to use or invoke other services
+// when we create event source mapper, then lambda role gives the access to read SQS event data
+
+
+// Lambda Resource Based Policy
+// It allows other services or other accounts to use lambda resources.
+// If services like S3 need to access lambda, then resource based policy gives them the access
+
+// An IAM Principal can access Lambda:
+// If The Role attached to the principal allows it
+// Or if the Lambda resouce based policy authorize it
+
+
+// Lambda can write the logs to CloudWatch
+// For this Lambda should have the permission to write into CloudWatch
+// We need to specify in the lambda rule (this comes under LambdaBasicExecutionRole)
+
+// Lambda has default RAM of 128 MB which can be increased upto 10 GB in 1MB increments (automated)
+// The more RAM added, the more vCPU we get
+// Any kind of DB connections or reusable thing is advisable to initialize outside the handler
+// In this way, that part can be reused across invocation
+
+
 resource "aws_lambda_function" "demo-lambda" {
   function_name = "demo-lambda"
   handler = "demo-lambda.handler"

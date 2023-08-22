@@ -35,3 +35,10 @@ resource "aws_lambda_permission" "permission_for_s3_event_notification" { //lamb
   principal = "s3.amazonaws.com"
   source_arn = "arn:aws:s3:::jiku-demo-s3"
 }
+
+resource "aws_lambda_event_source_mapping" "even_source_mapper" {
+  batch_size = 1
+  enabled = true
+  event_source_arn = aws_sqs_queue.demo-queue.arn
+  function_name = aws_lambda_function.demo-lambda.function_name
+}

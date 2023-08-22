@@ -6,3 +6,4 @@ resource "aws_sqs_queue" "demo-dlq" {
   }
 }
 
+
