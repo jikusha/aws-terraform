@@ -38,6 +38,24 @@
 // So we need to set the visibility timeout by considering all these factors
 
 
+// Dead Letter Queue
+// If a consumer fails to process a message within the visibility timeout, then the message goes back to the queue
+// We can set up a limit of how many times a message can return to the queue
+// If the limit is exceeded then we can set up a DLQ where the message will go
+// Then we can do a manual inspection and debugging of the message
+// DLQ of a standard queue must be a Standard queue
+// It is advisable to keep retention perid of 14 days in DLQ
+
+
+// DLQ - Redrive to Source
+// Once the consumer code is fixed, then we can redrive the message from DLQ to source queue (or anu other queue)
+// And the consumer can process the message
+
+// Delay Seconds
+// It is a parameter we can set in the queue level or each message level
+//  The messgae which is being produced will be available to consumer after the given delay seconds(maximum 15 mins)
+
+
 resource "aws_sqs_queue" "demo-queue" {
   name = "demo-queue"
   delay_seconds = 0
@@ -77,4 +95,27 @@ resource "aws_sqs_queue_policy" "sqs_policy" {
   ]
 }
 POLICY
+}
+
+resource "aws_sqs_queue" "main-queue" {
+  name = "main-queue"
+  delay_seconds = 0
+  visibility_timeout_seconds = 3
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.main-queue-dlq.arn
+    maxReceiveCount = 3
+  })
+  tags = {
+    "Purpose" = "Demo Purpose"
+  }
+}
+
+resource "aws_sqs_queue" "main-queue-dlq" {
+  name = "main-queue-dlq"
+  delay_seconds = 0
+  visibility_timeout_seconds = 30
+  message_retention_seconds = 1209600
+  tags = {
+    "Purpose" = "Demo Purpose"
+  }
 }
