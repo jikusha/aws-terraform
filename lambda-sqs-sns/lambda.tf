@@ -94,6 +94,30 @@
 // In this way, that part can be reused across invocation
 
 
+// Lambda Layers
+// So in a lambda function, there can be some external dependencies
+// If there are more than one lambda functions and they are almost using the same external dependencies
+// Then instead of packaging the external dependencies with each lambda function zip,
+// we can create layer with the external dependecnies and we can re-use them across many lambda function
+// Also custom runtime can be created using layers
+
+
+// Lambda Concurrency
+// All the lambda together in a account have total of 1000 concurrency limit
+// We can reserve the concurrency limit in each function level
+// In this way, one function will not be throttled
+// If we don't reserve concurrency for a lambda function, then if any other lambda function goes over 1000 concurrent execution
+// in that case the 1st lambda function will throttle
+// Throttle:
+// Syschronous invocation => return 429 throttle error
+// Asynchronous invocation => will retry automatically and will go to DLQ
+
+
+// External Dependencies
+// SDK by default comes with every lambda function
+// For other depoendencies, we need to zip them together with code
+
+
 resource "aws_lambda_function" "demo-lambda" {
   function_name = "demo-lambda"
   handler = "demo-lambda.handler"
