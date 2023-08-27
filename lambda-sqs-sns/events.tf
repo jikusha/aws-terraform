@@ -28,10 +28,18 @@ resource "aws_lambda_permission" "schedule_job_permission" { //lambda resource b
 #   }
 # }
 
-resource "aws_s3_bucket_notification" "s3_event_sqs" {
+# resource "aws_s3_bucket_notification" "s3_event_sqs" {
+#   bucket = "jiku-demo-s3"  
+#   queue {
+#     queue_arn = aws_sqs_queue.demo-queue.arn
+#     events              = ["s3:ObjectCreated:*"]
+#   }
+# }
+
+resource "aws_s3_bucket_notification" "s3_event_sns" {
   bucket = "jiku-demo-s3"  
-  queue {
-    queue_arn = aws_sqs_queue.demo-queue.arn
+  topic {
+    topic_arn = aws_sns_topic.demo-topic.arn
     events              = ["s3:ObjectCreated:*"]
   }
 }

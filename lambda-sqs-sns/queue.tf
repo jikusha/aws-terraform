@@ -119,3 +119,10 @@ resource "aws_sqs_queue" "main-queue-dlq" {
     "Purpose" = "Demo Purpose"
   }
 }
+
+
+resource "aws_sns_topic_subscription" "sns_subscription" {
+  topic_arn = aws_sns_topic.demo-topic.arn
+  protocol = "sqs"
+  endpoint = aws_sqs_queue.demo-queue.arn
+}
